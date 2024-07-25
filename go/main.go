@@ -6,9 +6,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/gocolly/colly"
-	"github.com/joho/godotenv"
 	"time"
+
+	"github.com/gocolly/colly"
 )
 
 type UserGPA struct {
@@ -37,7 +37,8 @@ type LabsDataHistorys struct {
 }
 
 func main() {
-	url, fileName := loadEnv()
+	env := loadEnv()
+	url, fileName := env.Url, env.FileName
 
 	now := time.Now()
 	waitSeconds := 60 - now.Second()
@@ -71,16 +72,6 @@ func updateLabData(url string, fileName string) {
 	})
 	c.Visit(url)
 
-}
-
-func loadEnv() (string, string) {
-	err := godotenv.Load(".env")
-	if err != nil {
-		fmt.Printf("can't read .env: %v", err)
-	}
-	url := os.Getenv("URL")
-	fileName := os.Getenv("FILE")
-	return url, fileName
 }
 
 func appendData(newData LabsData, fileName string) {
